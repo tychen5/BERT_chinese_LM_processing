@@ -27,8 +27,8 @@ def translate(src, dest):
     result.close()
 
 
-root_dir = "../Data/THUCNews/"
-dest_dir = "../Data/THUCNews_trad/"
+root_dir = "../Data/THUCNews/"  # simplifies news dir
+dest_dir = "../Data/THUCNews_trad/"  # converted(traditional) news dir
 if not os.path.isdir(dest_dir):
     os.mkdir(dest_dir)
 files_simple = next(os.walk(root_dir))[2]

@@ -9,6 +9,8 @@ __pycache__/
 # custom
 **/data/*
 **/DATA/*
+**/Data/*
+**/Model/*
 **/.ipynb_checkpoints/*
 *~
 **~
