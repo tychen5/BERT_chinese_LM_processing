@@ -89,14 +89,17 @@ for file in tqdm(trad_files):
 
     for i in range(iters):
         # print(i)
-        sentences.append([text[i * max_length:(i + 1) * max_length]])
-    sentences.append('\n')
+        sentences.append([text[i * max_length:(i + 1) * max_length]]) #一句話放到一個list裡面
+    sentences.append([''])
     # print(sentences[0]) #debug
     # print(sentences[1])
     # print(text[:10])
 print(sentences[:-10])
-with open("../Data/pretrained2.txt", 'w') as f:
+'''
+sentences = [['我覺得很怪'],[''],['真的超級奇怪'],['好像有人在騙人']]
+'''
+with open("../Data/pretrained.txt", 'w') as f:
     for item in sentences:
-        f.write(str(item) + '\n')
+        f.write(item[0] + '\n')
 
-pickle.dump(obj=sentences, file=open("../Data/pretrained3.txt", 'w'))
+# pickle.dump(obj=sentences, file=open("../Data/pretrained3.txt", 'w'))
