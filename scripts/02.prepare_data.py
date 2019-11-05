@@ -1,5 +1,4 @@
 import os
-import pickle
 import re
 
 import numpy as np
@@ -95,10 +94,12 @@ for file in tqdm(trad_files):
     # print(sentences[1])
     # print(text[:10])
 print(sentences[:-10])
+
+# sentences = [['123'],[''],['kkycc']]
 '''
 sentences = [['我覺得很怪'],[''],['真的超級奇怪'],['好像有人在騙人']]
 '''
-with open("../Data/pretrained.txt", 'w') as f:
+with open("../Data/pretrained.txt", 'w', encoding='utf8') as f:
     for item in sentences:
         f.write(item[0] + '\n')
 
