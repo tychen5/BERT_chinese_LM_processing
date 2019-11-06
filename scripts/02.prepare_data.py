@@ -34,8 +34,25 @@ def basic_statistics(all_length):
     return pd.DataFrame.from_dict(stat_dict, orient='index', columns=['length'])
 
 
+max_length = 512  # BERT need to be lower than 512
+sentences = []
 root_dir = "../Data/THUCNews_trad/"
-trad_files = next(os.walk(root_dir))[2]
+trad_cat = next(os.walk(root_dir))[1]
+for cat in tqdm(trad_cat):
+    trad_files = next(os.walk(root_dir+cat+'/'))[2]
+    for file in trad_files:
+        in_path = root_dir + cat + '/' + file
+        r = open(in_path, 'r', encoding='utf-8')
+        text = r.read()
+        text = re.sub(r'\n', "", text)
+        text = re.sub(r'\u3000', "", text)
+        length = len(text)
+        iters = int(length / max_length) + 1
+        for i in range(iters):
+            sentences.append([text[i * max_length:(i + 1) * max_length]]) #一句話放到一個list裡面
+        sentences.append([''])
+print(sentences[:-10])
+
 length_li = []
 
 ## for look into statistics and decide max_length
@@ -72,6 +89,11 @@ far_out   2651.000000
 100%     14425.000000
 
 '''
+# The input is a plain text file, with one sentence per line.
+# (It is important that these be actual sentences for the "next sentence prediction" task).
+# Documents are delimited by empty lines.
+
+'''
 max_length = 512  # BERT need to be lower than 512
 sentences = []
 for file in tqdm(trad_files):
@@ -94,12 +116,13 @@ for file in tqdm(trad_files):
     # print(sentences[1])
     # print(text[:10])
 print(sentences[:-10])
-
+'''
 # sentences = [['123'],[''],['kkycc']]
 '''
 sentences = [['我覺得很怪'],[''],['真的超級奇怪'],['好像有人在騙人']]
 '''
-with open("../Data/pretrained.txt", 'w', encoding='utf8') as f:
+
+with open("../Data/pretrained_sent_doc.txt", 'w', encoding='utf8') as f:
     for item in sentences:
         f.write(item[0] + '\n')
 
