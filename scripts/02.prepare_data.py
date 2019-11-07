@@ -7,9 +7,8 @@ import tokenization
 from tqdm import tqdm
 
 vocab_file = "../Model/chinese_L-12_H-768_A-12/vocab.txt"
-
 tokenizer = tokenization.FullTokenizer(vocab_file=vocab_file)
-
+# ctrl alt L
 
 def basic_statistics(all_length):
     '''
@@ -39,7 +38,7 @@ sentences = []
 root_dir = "../Data/THUCNews_trad/"
 trad_cat = next(os.walk(root_dir))[1]
 for cat in tqdm(trad_cat):
-    trad_files = next(os.walk(root_dir+cat+'/'))[2]
+    trad_files = next(os.walk(root_dir + cat + '/'))[2]
     for file in trad_files:
         in_path = root_dir + cat + '/' + file
         r = open(in_path, 'r', encoding='utf-8')
@@ -49,7 +48,7 @@ for cat in tqdm(trad_cat):
         length = len(text)
         iters = int(length / max_length) + 1
         for i in range(iters):
-            sentences.append([text[i * max_length:(i + 1) * max_length]]) #一句話放到一個list裡面
+            sentences.append([text[i * max_length:(i + 1) * max_length]])  # 一句話放到一個list裡面
         sentences.append([''])
 print(sentences[:-10])
 
