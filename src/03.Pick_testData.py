@@ -29,7 +29,7 @@ for cat in tqdm(cat_dir):
     cat_en = translator.translate(cat).text
     in_dir = root_dir + cat + '/'
     files = next(os.walk(in_dir))[2]
-    test_files_num = int(len(files) * 0.1)  # take 10% data to test
+    test_files_num = int(len(files) * 0.05)  # take 5% data to test
     test_files = random.choices(files, k=test_files_num)
     sentences = []
     for text_id in test_files:
