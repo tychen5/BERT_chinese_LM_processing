@@ -7,3 +7,5 @@
     * diffrent tokenizer
     * diffrent embedding
     * different pretrained
+* 0X.For PoC THUCNews
+* 00X. For old data sinopac
