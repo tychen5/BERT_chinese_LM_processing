@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Data" />
       <excludeFolder url="file://$MODULE_DIR$/Model" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (TM_LEO)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (Env_Leo)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">

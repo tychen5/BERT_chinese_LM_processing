@@ -140,7 +140,7 @@ in_rule = in_rule[in_rule['對應外部法規1'].notna()]
 
 
 l = []
-for i in in_rule.index:m
+for i in in_rule.index:
     for j in range(1,15):
         if (pd.isnull(in_rule.loc[i]['對應外部法規'+str(j)]) == False):
             if (pd.isnull(in_rule.loc[i]['對應外部法規條文編號'+str(j)]) == False) & (type(in_rule.loc[i]['對應外部法規條文編號'+str(j)]) != int):

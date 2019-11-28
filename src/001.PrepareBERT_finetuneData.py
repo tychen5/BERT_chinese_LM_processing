@@ -200,3 +200,6 @@ data_df.法規名稱 = data_df.法規名稱.map(step_1)
 data_df.法規名稱 = data_df.法規名稱.map(step_2)
 data_df.法規名稱 = data_df.法規名稱.map(step_3)
 data_df.法規名稱 = data_df.法規名稱.map(step_4)
+
+data_df["in_BERT"] = data_df.法規名稱 + "：" + data_df.條文內容
+
