@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/Data" />
       <excludeFolder url="file://$MODULE_DIR$/Model" />
+      <excludeFolder url="file://$MODULE_DIR$/Results" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (Env_Leo)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
