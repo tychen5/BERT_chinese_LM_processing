@@ -11,6 +11,9 @@ __pycache__/
 **/DATA/*
 **/Data/*
 **/Model/*
+**/models/*
+**/data/*
+**/config/*
 **/.ipynb_checkpoints/*
 *~
 **~
@@ -118,3 +121,6 @@ venv.bak/
 .mypy_cache/
 /Results/
 /Results/
+/src/Senta/models/
+/src/Senta/data/
+/src/Senta/config/
