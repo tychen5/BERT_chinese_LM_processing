@@ -1,8 +1,8 @@
 # import snownlp
-from bixin import predict
+from bixin_2 import predict  # revised version of bixin package by Leo
 from textblob import TextBlob
 import pandas as pd
-import time
+import time, pickle
 import numpy as np
 from snownlp import SnowNLP
 from googletrans import Translator
@@ -17,6 +17,7 @@ pre = "D:\python\LEO_TM\BERT_chinese_LM_processing\src\\"  # for pycharm only
 ori_news_path = pre + "../data/TextTokenize_zh/Foxconn_News_2018.csv"  # POC_NEWS.csv
 tok_news_path = pre + "../Results/tokenize_Foxconn2018_news_Leo.xlsx"
 senta_path = pre + "../data/TextTokenize_zh/Foxconn_Senta.txt"
+three_algo_checkpoint = pre + "../data/TextTokenize_zh/Foxconn_3algo.pkl"
 
 
 def snow_nlp(doc):
@@ -36,7 +37,8 @@ def snow_nlp(doc):
 translator_en = Translator()
 translator_cn = Translator()
 cc1 = OpenCC('s2t')
-cc2 = OpenCC('t2s') #trad2sim
+cc2 = OpenCC('t2s')  # trad2sim
+
 
 def text_blob(doc):
     """
@@ -84,8 +86,11 @@ def bi_xin(doc):
         translator_cn = Translator()
         cn_text = translator_cn.translate(doc, dest='zh-cn').text
     except:
-        blob = TextBlob(doc)
-        cn_text = str(blob.translate(to="zh-CN"))
+        try:
+            blob = TextBlob(doc)
+            cn_text = str(blob.translate(to="zh-CN"))
+        except:
+            cn_text = cc2.convert(doc)
     score = predict(cn_text)
     return score
 
@@ -101,16 +106,20 @@ def combine_tok(s):
 
 tok_news_pd = pd.read_excel(tok_news_path)
 tok_news_pd['cleaned_news'] = tok_news_pd.tok_title_news.map(combine_tok)
+print("running first algorithm...")
 tok_news_pd['tb_score'] = tok_news_pd.cleaned_news.map(text_blob)
+print("running second algorithm...")
 tok_news_pd['sn_score'] = tok_news_pd.cleaned_news.map(snow_nlp)
+print("running third algorithm...")
 tok_news_pd['bx_score'] = tok_news_pd.cleaned_news.map(bi_xin)
-
+print("preparing fourth algorithm...(plz run forth algorithm in other files)")
+pickle.dump(obj=tok_news_pd, file=open(three_algo_checkpoint, 'wb'))
 # do in first time for senta only
 with open(senta_path, 'w', encoding='utf-8') as f:
     senta_li = tok_news_pd.tok_title_news.tolist()
     for news in tqdm(senta_li):
         news_tok = news.split()
-        news_ = "╱".join(news_tok) #need to be the same
+        news_ = "╱".join(news_tok)  # need to be the same
         # new_news = []
         # for news_ in news_tok:
         try:
@@ -124,7 +133,7 @@ with open(senta_path, 'w', encoding='utf-8') as f:
                 news_cn = cc2.convert(news_)
             # new_news.append(news_cn)
         # news_cn = " ".join(new_news)
-        news_cn = news_cn.split("╱") #need to be the same
+        news_cn = news_cn.split("╱")  # need to be the same
         news_cn = " ".join(news_cn)
         f.write("0" + '\t' + news_cn + '\n')
 
