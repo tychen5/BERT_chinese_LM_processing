@@ -112,7 +112,7 @@ print("running second algorithm...")
 tok_news_pd['sn_score'] = tok_news_pd.cleaned_news.map(snow_nlp)
 print("running third algorithm...")
 tok_news_pd['bx_score'] = tok_news_pd.cleaned_news.map(bi_xin)
-print("preparing fourth algorithm...(plz run forth algorithm in other files)")
+print("preparing fourth algorithm...(plz run forth algorithm in other files: Senta/sentiment_classify.py)")
 pickle.dump(obj=tok_news_pd, file=open(three_algo_checkpoint, 'wb'))
 # do in first time for senta only
 with open(senta_path, 'w', encoding='utf-8') as f:

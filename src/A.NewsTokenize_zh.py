@@ -111,7 +111,7 @@ all_corpus = []
 for sentence in word_sentence_list:
     all_corpus.append(" ".join(sentence))
 # print(all_corpus[0])
-vectoerizer = CountVectorizer(min_df=2, max_df=0.99, token_pattern='\\b\\w+\\b')
+vectoerizer = CountVectorizer(min_df=3, max_df=0.9, token_pattern='\\b\\w+\\b')
 vectoerizer.fit(all_corpus)
 X = vectoerizer.transform(all_corpus)
 tfidf_transformer = TfidfTransformer()
@@ -178,7 +178,7 @@ for tf_df, ner_df, tfidf_df, tr_df in zip(TF_news_li, NER_news_li, TFIDF_df_li, 
 # write result
 df = pd.DataFrame(columns=['ori_title', 'ori_news', 'tok_title_news', 'keyWord_algorithm'])
 for title_str, news_str, news_tok_li, com_df in zip(all_title_li, all_news_li, word_sentence_list, COM2_df_li):
-    key_words = com_df[com_df.score > com_df.score.mean() + 2 * com_df.score.std()]
+    key_words = com_df[com_df.score > com_df.score.mean() + 1.65 * com_df.score.std()] #2*
     key_words = key_words.Word.tolist()
     temp = [title_str, news_str, " ".join(news_tok_li), "、".join(key_words)]
     temp = pd.Series(temp, index=df.columns)
@@ -186,11 +186,11 @@ for title_str, news_str, news_tok_li, com_df in zip(all_title_li, all_news_li, w
 df.to_excel(result_path)
 print(df)
 algo_end = time.time() - algo_start
-print("Model Load Time:", '{:02d}:{:02d}:{:02d}'.format(load_end // 3600, (load_end % 3600 // 60), load_end % 60))
+print("Model Load Time:", '{:02f}:{:02f}:{:02f}'.format(load_end // 3600, (load_end % 3600 // 60), load_end % 60))
 print("DL Tokenize Time:",
-      '{:02d}:{:02d}:{:02d}'.format(tokenize_end // 3600, (tokenize_end % 3600 // 60), tokenize_end % 60))
+      '{:02f}:{:02f}:{:02f}'.format(tokenize_end // 3600, (tokenize_end % 3600 // 60), tokenize_end % 60))
 print("KeyWord Algorithm Time:",
-      '{:02d}:{:02d}:{:02d}'.format(algo_end // 3600, (algo_end % 3600 // 60), algo_end % 60))
+      '{:02f}:{:02f}:{:02f}'.format(algo_end // 3600, (algo_end % 3600 // 60), algo_end % 60))
 # 2628 Foxconn
 '''
 # for ALL NER
