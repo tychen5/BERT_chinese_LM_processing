@@ -141,9 +141,13 @@ def sentimize(tok_news_pd):
             f.write("0" + '\t' + news_cn + '\n')
 
     print("running forth algorithm...")
-    subprocess.call("python ./TokSentLeo/Senta/sentiment_classify.py  --test_data_path " + senta_path
-                    + "--word_dict_path ./TokSentLeo/Senta/config/train.vocab --mode infer --model_path " +
-                      "./TokSentLeo/Senta/config/Senta/")
+    cmd = ["conda", "activate", "Env_Leo", "&&", "python", "./TokSentLeo/Senta/sentiment_classify.py",
+           "--test_data_path", senta_path,
+           "--word_dict_path", "./TokSentLeo/Senta/config/train.vocab", "--mode", "infer", "--model_path",
+           "./TokSentLeo/Senta/config/Senta/"]  # "python",
+    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)  # ,shell=True
+    out, err = p.communicate()
+    print(err)
     fourth_algo = pickle.load(open(fourth_algo_checkpoint, 'rb'))
     four_algos = pd.merge(tok_news_pd, fourth_algo, left_on='Unnamed: 0', right_on='input_id', how='outer')
     four_algos = four_algos.filter(['Date', 'input_id', 'tb_score', 'sn_score', 'bx_score', 'senta_score'])  # df's cols

@@ -286,7 +286,9 @@ def main(args):
             args.model_path)
         id_list = [i for i in range(len(score_li))]
         df = pd.DataFrame({'input_id':id_list,'senta_score':score_li})
-        pickle.dump(file=open('./SentaDL_output.pkl','wb'), obj=df)
+        pickle.dump(file=open('./TokSentLeo/Senta/SentaDL_output.pkl','wb'), obj=df)
+        print("data saved.")
+        return df
 
 
 
