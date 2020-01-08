@@ -5,6 +5,8 @@ from collections import Counter
 
 
 def sentiment_score(tok_news_df, four_algos, by='month'):
+    tok_news_df['input_id'] = tok_news_df.index
+
     def convert_date(s):
         return s.split('/')[take]
 
@@ -39,11 +41,13 @@ def sentiment_score(tok_news_df, four_algos, by='month'):
             print("please check why there's empty value in some other fields")
     assert len(four_algos[four_algos.isna().any(axis=1)]) == 0
 
-    final_algo = four_algos.filter(['input_id', 'final_sentiment'])
-    final_df = pd.merge(tok_news_df, final_algo, left_on='Unnamed: 0', right_on='input_id', how='outer')
-    final_df = final_df.drop(['Unnamed: 0', 'input_id'], axis=1)
+    final_algo = four_algos.filter(['input_id', 'Month', 'final_sentiment'])
+    final_df = pd.merge(tok_news_df, final_algo, on='input_id', how='outer')  # left_on='Unnamed: 0', right_
+    final_df = final_df.drop(['input_id'], axis=1)
     if take == 1:
         senti_df = final_df.filter(['Month', 'final_sentiment'])
+        # print(final_df.columns)
+        # print(senti_df.columns)
         senti_df = senti_df.groupby('Month').mean()
         senti_df.reset_index(inplace=True)
         senti_df['Month'] = senti_df['Month'].astype('int')

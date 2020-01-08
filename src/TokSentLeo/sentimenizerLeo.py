@@ -148,7 +148,9 @@ def sentimize(tok_news_pd):
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)  # ,shell=True
     out, err = p.communicate()
     print(err)
+
     fourth_algo = pickle.load(open(fourth_algo_checkpoint, 'rb'))
-    four_algos = pd.merge(tok_news_pd, fourth_algo, left_on='Unnamed: 0', right_on='input_id', how='outer')
-    four_algos = four_algos.filter(['Date', 'input_id', 'tb_score', 'sn_score', 'bx_score', 'senta_score'])  # df's cols
+    tok_news_pd['input_id'] = tok_news_pd.index
+    four_algos = pd.merge(tok_news_pd, fourth_algo, on='input_id', how='outer')
+    four_algos = four_algos.filter(['input_id', 'Date', 'tb_score', 'sn_score', 'bx_score', 'senta_score'])  # df's cols
     return four_algos
