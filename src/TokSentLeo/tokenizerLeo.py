@@ -1,5 +1,6 @@
 from ckiptagger import construct_dictionary, WS, POS, NER
 import pandas as pd
+import numpy as np
 from collections import Counter
 from sklearn.feature_extraction.text import *
 from summa import keywords
@@ -9,7 +10,7 @@ import time
 def tokenize(news_df):
     """
     To tokenize & extract key word
-    :param news_df: (title,content,date)
+    :param news_df: (title,content,date) 依照時間日期遞增的方式(1月=>12月)排序好之df
     :return: df: ('ori_title', 'ori_news', 'tok_title_news', 'keyWord_algorithm')
     """
     load_start = time.time()
@@ -153,16 +154,62 @@ def tokenize(news_df):
         COM2_df_li.append(com2_df)
 
     # write result
-    df = pd.DataFrame(columns=['Date', 'ori_title', 'ori_news', 'tok_title_news', 'keyWord_algorithm']) #df's columns
+    df = pd.DataFrame(columns=['Date', 'ori_title', 'ori_news', 'tok_title_news', 'keyWord_algorithm'])  # df's columns
+    month = []
+    word_month = []
+    score_month = []
     for day, title_str, news_str, news_tok_li, com_df in zip(all_date_li, all_title_li, all_news_li, word_sentence_list,
                                                              COM2_df_li):
         key_words = com_df[com_df.score > com_df.score.mean() + 1.65 * com_df.score.std()]  # 2*
         key_words = key_words.Word.tolist()
-        temp = [str(day),title_str, news_str, " ".join(news_tok_li), "、".join(key_words)]
+        key_words_month = com_df[com_df.score > com_df.score.mean() + 2 * com_df.score.std()]
+        words_score_month = key_words_month.score.tolist()
+        key_words_month = key_words_month.Word.tolist()
+
+        temp = [str(day), title_str, news_str, " ".join(news_tok_li), "、".join(key_words)]
         temp = pd.Series(temp, index=df.columns)
+        for word, score in zip(words_score_month, key_words_month):
+            month.append(str(day).split('/')[1])
+            word_month.append(word)
+            score_month.append(score)
         df = df.append(temp, ignore_index=True)
+
+    current_month = month[0]
+    need_dict = {}
+    dict_order = []
+    month_order = []
+    for i, (m, w, s) in enumerate(zip(month, word_month, score_month)):
+        if m != current_month:
+            month_order.append(current_month)
+            current_month = m
+            for k, v in need_dict.items():
+                need_dict[k] = np.mean(v)
+            dict_order.append(need_dict)
+            need_dict = {}
+            need_dict[w] = list([s])
+            if i == len(month) - 1:
+                dict_order.append(need_dict)
+
+        else:
+            if w not in list(need_dict.keys()):
+                need_dict[w] = list([s])
+            else:
+                temp = need_dict[w]
+                temp.append(s)
+                need_dict[w] = temp
+            if i == len(month) - 1:
+                month_order.append(m)
+                for k, v in need_dict.items():
+                    need_dict[k] = np.mean(v)
+                dict_order.append(need_dict)
+    df_month_key = pd.DataFrame(columns=['Month', 'key_word', 'score'])  # overall month key word with score
+    for mo, dict_mo in zip(month_order, dict_order):
+        for k, v in dict_mo.items():
+            temp = [int(mo), str(k), v]
+            temp = pd.Series(temp, index=df_month_key.columns)
+            df_month_key = df_month_key.append(temp, ignore_index=True)
 
     algo_end = time.time() - algo_start
     print("KeyWord Algorithm Time:",
           '{:02f}:{:02f}:{:02f}'.format(algo_end // 3600, (algo_end % 3600 // 60), algo_end % 60))
-    return df
+    return df, df_month_key
