@@ -168,7 +168,7 @@ def tokenize(news_df):
 
         temp = [str(day), title_str, news_str, " ".join(news_tok_li), "、".join(key_words)]
         temp = pd.Series(temp, index=df.columns)
-        for word, score in zip(words_score_month, key_words_month):
+        for word, score in zip(key_words_month, words_score_month):
             month.append(str(day).split('/')[1])
             word_month.append(word)
             score_month.append(score)
@@ -183,28 +183,36 @@ def tokenize(news_df):
             month_order.append(current_month)
             current_month = m
             for k, v in need_dict.items():
-                need_dict[k] = np.mean(v)
+                if len(v) < 3:  # DF<3 do not take
+                    need_dict[k] = 0
+                else:
+                    need_dict[k] = np.mean(v)
             dict_order.append(need_dict)
             need_dict = {}
-            need_dict[w] = list([s])
+            need_dict[w] = list([float(s)])
             if i == len(month) - 1:
                 dict_order.append(need_dict)
 
         else:
             if w not in list(need_dict.keys()):
-                need_dict[w] = list([s])
+                need_dict[w] = list([float(s)])
             else:
                 temp = need_dict[w]
-                temp.append(s)
+                temp.append(float(s))
                 need_dict[w] = temp
             if i == len(month) - 1:
                 month_order.append(m)
                 for k, v in need_dict.items():
-                    need_dict[k] = np.mean(v)
+                    if len(v) < 3:  # DF<3 do not take
+                        need_dict[k] = 0
+                    else:
+                        need_dict[k] = np.mean(v)
                 dict_order.append(need_dict)
     df_month_key = pd.DataFrame(columns=['Month', 'key_word', 'score'])  # overall month key word with score
     for mo, dict_mo in zip(month_order, dict_order):
         for k, v in dict_mo.items():
+            if v < 0.1:  # DF<3 do not take
+                continue
             temp = [int(mo), str(k), v]
             temp = pd.Series(temp, index=df_month_key.columns)
             df_month_key = df_month_key.append(temp, ignore_index=True)
