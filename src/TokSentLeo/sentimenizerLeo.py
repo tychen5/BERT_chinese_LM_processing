@@ -1,4 +1,4 @@
-from bixin_2 import predict  # revised version of bixin package by Leo
+from TokSentLeo.bixin_2 import predict  # revised version of bixin package by Leo
 from textblob import TextBlob
 import pandas as pd
 import pickle, time
@@ -141,13 +141,17 @@ def sentimize(tok_news_pd):
             f.write("0" + '\t' + news_cn + '\n')
 
     print("running forth algorithm...")
-    cmd = ["conda", "activate", "Env_Leo", "&&", "python", "./TokSentLeo/Senta/sentiment_classify.py",
+    # cmd = ["conda", "activate", "Env_Leo", "&&", "python", "./TokSentLeo/Senta/sentiment_classify.py",
+    #        "--test_data_path", senta_path,
+    #        "--word_dict_path", "./TokSentLeo/Senta/config/train.vocab", "--mode", "infer", "--model_path",
+    #        "./TokSentLeo/Senta/config/Senta/"]  # "python",
+    cmd = ["python", "./TokSentLeo/Senta/sentiment_classify.py",
            "--test_data_path", senta_path,
            "--word_dict_path", "./TokSentLeo/Senta/config/train.vocab", "--mode", "infer", "--model_path",
-           "./TokSentLeo/Senta/config/Senta/"]  # "python",
+           "./TokSentLeo/Senta/config/Senta/"]
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)  # ,shell=True
     out, err = p.communicate()
-    print(err)
+    print("!!!!!!!!!!!!!!! (base)Environment Error:", err, '!!!!!!!!!!!!!!!!')
 
     fourth_algo = pickle.load(open(fourth_algo_checkpoint, 'rb'))
     tok_news_pd['input_id'] = tok_news_pd.index
