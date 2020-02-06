@@ -1,16 +1,20 @@
-from TokSentLeo.bixin_2 import predict  # revised version of bixin package by Leo
-from textblob import TextBlob
-import pandas as pd
-import pickle, time
-import numpy as np
-from snownlp import SnowNLP
-from googletrans import Translator
-from translate import Translator as tT
-from tqdm import tqdm
-from translation import iciba
-from opencc import OpenCC
-import goslate
+import pickle
 import subprocess
+import time
+
+import goslate
+import numpy as np
+import pandas as pd
+from googletrans import Translator
+from opencc import OpenCC
+from snownlp import SnowNLP
+from textblob import TextBlob
+from tqdm import tqdm
+from translate import Translator as tT
+from translation import iciba
+import paddle.fluid as fluid #check pip install pkg for subprocess
+
+from TokSentLeo.bixin_2 import predict  # revised version of bixin package by Leo
 
 
 def sentimize(tok_news_pd):
