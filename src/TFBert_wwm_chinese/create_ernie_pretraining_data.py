@@ -27,8 +27,8 @@ from tqdm import tqdm
 import jieba
 from ckiptagger import construct_dictionary, WS, POS, NER
 
-define_dict_path = "./TokSentLeo/user_dict/company_dict.txt"
-model_path = './TokSentLeo/CKIP_model/'
+define_dict_path = "../TokSentLeo/user_dict/company_dict.txt"
+model_path = '../TokSentLeo/CKIP_model/'
 ws = WS(model_path)
 word_to_weight = {}
 with open(define_dict_path, "r", encoding='utf8') as file:
@@ -56,7 +56,7 @@ flags.DEFINE_bool(
     "Whether to lower case the input text. Should be True for uncased "
     "models and False for cased models.")
 
-flags.DEFINE_integer("max_seq_length", 128, "Maximum sequence length.")
+flags.DEFINE_integer("max_seq_length", 512, "Maximum sequence length.")
 
 flags.DEFINE_integer("max_predictions_per_seq", 20,
                      "Maximum number of masked LM predictions per sequence.")
