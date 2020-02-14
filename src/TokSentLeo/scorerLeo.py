@@ -60,6 +60,6 @@ def sentiment_score(tok_news_df, four_algos, by='month'):
         senti_df['Month'] = senti_df['Month'].astype('int')
         senti_df = senti_df.sort_values(by=['Month'])
         senti_df.reset_index(inplace=True, drop=True)
-        return senti_df
+        return senti_df,final_df
     else:
         print('Not Implement Yet!')
