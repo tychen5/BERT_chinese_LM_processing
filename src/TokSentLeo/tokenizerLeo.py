@@ -47,12 +47,21 @@ def tokenize(news_df):
     pos_sentence_list = pos(word_sentence_list)
     entity_sentence_list = ner(word_sentence_list, pos_sentence_list)
     temp = []
+    temp1 = []
     bad_list = ["<br>", "br", "BR", "<BR>", "，", "【", "】", "╱", "▲", "▼", "&amp;amp;amp;amp;amp;lt;br",
                 "&amp;amp;amp;amp;amp;gt", "amp", "lt", "br&", "gt", "&amp", "[", "]"]
-    for w_s_l in word_sentence_list:
+    for w_s_l, e_s_l in zip(word_sentence_list, entity_sentence_list):
+        # t = []
+        # t1 = []
+        # for i, x in enumerate(w_s_l):
+        #     if x not in bad_list:
+        #         t.append(x)
+        #         t1.append(e_s_l[i])
         t = [x for x in w_s_l if x not in bad_list]
         temp.append(t)
+        # temp1.append(t1)
     word_sentence_list = temp
+    # entity_sentence_list = temp1
 
     tokenize_end = time.time() - tokenize_start
     print("DL Tokenize Time:",
