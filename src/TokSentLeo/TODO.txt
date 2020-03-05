@@ -1,0 +1,9 @@
+
+sinobank總時程跑完約45分鐘
+
+CountVectorizer(min_df=3, max_df=0.9, token_pattern='\\b\\w+\\b'): fit(存下來成pickle)、transform(all_corpus)
+TfidfTransformer: fit(把all_corpus X.numpy()存近來fit再存下來pkl)、transform(把新文章的拿來CV transform後，再TT transform)
+
+
+
+
